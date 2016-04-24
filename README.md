@@ -4,7 +4,7 @@ This app uses a PostgreSQL database and python to manage players in a tournament
 The app currently supports one tournament only. In order to use the same database for another tournament, the data needs to be deleted before new players are added.
 
 #App Contents
-##The app has the following files
+##The app contains the following files
 1. tournament.sql - Contains all the sql statements to create the database an the tables required for the tournament
 2. tournament.py - Contains all the functions that will be required to insert and get data from the database.
 3. tournament_test.py - Contains all the tests that in turn call the methods in tournament.py for adding, deleting and getting data from the db.

@@ -36,6 +36,7 @@ def deletePlayers():
     DB.close()
 
 
+
 def countPlayers():
     """Returns the number of players currently registered."""
     #connect to the database

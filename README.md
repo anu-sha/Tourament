@@ -1,5 +1,5 @@
 # Tournament
-This app uses a PostgreSQL database and python to manage players in a tournament, the matches between the players and the scoring.
+This app uses a PostgreSQL database and python to manage players in a swiss system tournament, the matches between the players and the scoring.
 
 The app currently supports one tournament only. In order to use the same database for another tournament, the data needs to be deleted before new players are added.
 

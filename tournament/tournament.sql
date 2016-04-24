@@ -51,5 +51,4 @@ create view player_standings as
 	order by wins desc
 
 
-
 	

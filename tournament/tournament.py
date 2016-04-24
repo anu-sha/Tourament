@@ -17,7 +17,7 @@ def deleteMatches():
     DB=psycopg2.connect("dbname=tournament")
     c=DB.cursor()
     #execute query to delete all records
-    c.execute("delete from matches")
+    c.execute("delete from matches") 
     DB.commit()
     #close the connection
     DB.close()

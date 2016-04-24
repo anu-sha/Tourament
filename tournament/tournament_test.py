@@ -7,7 +7,6 @@
 # as appropriate to account for your module's added functionality.
 
 from tournament import *
-
 def testCount():
     """
     Test for initial player count,

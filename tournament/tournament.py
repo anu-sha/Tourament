@@ -8,16 +8,20 @@ import psycopg2
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
-    return psycopg2.connect("dbname=tournament")
+    try:
+        DB=psycopg2.connect("dbname=tournament")
+        c=DB.cursor()
+        return DB,c
+    except:
+        print("Could not connect to database")
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
     #connect to database
-    DB=psycopg2.connect("dbname=tournament")
-    c=DB.cursor()
+    DB,c=connect()
     #execute query to delete all records
-    c.execute("delete from matches") 
+    c.execute("DELETE FROM matches")
     DB.commit()
     #close the connection
     DB.close()
@@ -27,23 +31,20 @@ def deleteMatches():
 def deletePlayers():
     """Remove all the player records from the database."""
     #connect to database
-    DB=psycopg2.connect("dbname=tournament")
-    c=DB.cursor()
+    DB,c=connect()
     #execute query to delete all records
-    c.execute("delete from players")
+    c.execute("DELETE FROM players")
     DB.commit()
     #close the connection
     DB.close()
 
 
-
 def countPlayers():
     """Returns the number of players currently registered."""
     #connect to the database
-    DB=psycopg2.connect("dbname=tournament")
-    c=DB.cursor()
+    DB,c=connect()
     #execute query to select all records
-    c.execute("select * from players")
+    c.execute("SELECT * FROM players")
     rows=c.fetchall()
     result=0
     #if the result of the query fetch is null then there are no players in the table
@@ -67,10 +68,9 @@ def registerPlayer(name):
       name: the player's full name (need not be unique).
     """
     #connect to the database
-    DB=psycopg2.connect("dbname=tournament")
-    c=DB.cursor()
+    DB,c=connect()
     #execute the insert with the player's name
-    add_player=("insert into players(name) values(%s)")
+    add_player=("INSERT INTO players(name) VALUES(%s)")
     c.execute(add_player,(name,))
     DB.commit()
     #close the connection
@@ -90,10 +90,9 @@ def playerStandings():
         matches: the number of matches the player has played
     """
     #connect to the database and obtain the cursor
-    DB=psycopg2.connect("dbname=tournament")
-    c=DB.cursor()
+    DB,c=connect()
     #execute the select query
-    c.execute("select * from player_standings")
+    c.execute("SELECT * FROM player_standings")
     #assign the results of the query to players
     players=c.fetchall()
     DB.commit()
@@ -110,10 +109,9 @@ def reportMatch(winner, loser):
       loser:  the id number of the player who lost
     """
     #connect to the database and obtain the cursor
-    DB=psycopg2.connect("dbname=tournament")
-    c=DB.cursor()
+    DB,c=connect()
     #use the insert query to add the winner and loser and execute the command
-    insert_match='insert into matches values(%s,%s)'
+    insert_match='INSERT INTO matches VALUES(%s,%s)'
     c.execute(insert_match,(winner,loser))
     #commit the insert
     DB.commit()
@@ -140,17 +138,17 @@ def swissPairings():
     pairings=[]
     #get player standings
     standings=playerStandings()
-    #find the number of players obtained from playerstandings
-    player_count=len(standings)
-    #iterate over each player incrementing in steps of 2 as we are
+    #iterate over each player 
     #assigning adjacent players to a game
-    for i in range(0,player_count,2):
+    for player1,player2 in zip(standings, standings[1:]):
         #create the tuple for the match
-        match_players=(standings[i][0],standings[i][1],standings[i+1][0],standings[i+1][1])
+        match_players=(player1[0],player1[1],player2[0],player2[1])
         #add the match tuple to the pairings list
         pairings.append(match_players)
-    #return the pairings    
-    return pairings
+   
+    #return the pairings at odd positions as the for loop iterates over all the elements
+       
+    return pairings[0::2]
 
 
 
